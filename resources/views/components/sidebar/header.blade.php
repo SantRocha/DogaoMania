@@ -4,7 +4,7 @@
         href="{{ route('dashboard') }}"
         class="inline-flex items-center gap-2"
     >
-        <x-application-logo aria-hidden="true" class="w-10 h-auto" />
+        <x-logo-dogao aria-hidden="true" class="w-10 h-auto" />
 
         <span class="sr-only">Dashboard</span>
     </a>

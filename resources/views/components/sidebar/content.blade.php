@@ -48,7 +48,7 @@
     </div>
 
     @php
-        $links = array_fill(0, 20, '');
+        $links = array_fill(0, 5, '');
     @endphp
 
     @foreach ($links as $index => $link)
