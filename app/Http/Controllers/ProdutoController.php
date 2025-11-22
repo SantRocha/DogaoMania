@@ -14,7 +14,7 @@ class ProdutoController extends Controller
     public function index()
     {
         $produtos = Produto::all();
-        return view('produtos.index', compact('produtos'));
+        return view('dashboard', compact('produtos'));
     }
 
     /**
@@ -43,12 +43,19 @@ class ProdutoController extends Controller
 
         // Upload da imagem
         if ($request->hasFile('imagem')) {
-            $data['imagem'] = $request->file('imagem')->store('produtos', 'public');
+            $file = $request->file('imagem');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // move para public/produtos
+            $file->move(public_path('produtos'), $filename);
+
+            // salva caminho relativo para uso com asset()
+            $data['imagem'] = 'produtos/' . $filename;
         }
 
         Produto::create($data);
 
-        return redirect()->route('produtos.index')->with('success', 'Produto criado com sucesso.');
+        return redirect()->route('dashboard')->with('success', 'Produto criado com sucesso.');
     }
 
     /**
@@ -92,7 +99,7 @@ class ProdutoController extends Controller
 
         $produto->update($data);
 
-        return redirect()->route('produtos.index')->with('success', 'Produto atualizado com sucesso.');
+        return redirect()->route('dashboard')->with('success', 'Produto atualizado com sucesso.');
     }
 
     /**
@@ -109,6 +116,6 @@ class ProdutoController extends Controller
 
         $produto->delete();
 
-        return redirect()->route('produtos.index')->with('success', 'Produto removido com sucesso.');
+        return redirect()->route('dashboard')->with('success', 'Produto removido com sucesso.');
     }
 }

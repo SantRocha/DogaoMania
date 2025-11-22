@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Storage;
 class PromocaoController extends Controller
 {
     /**
-     * Lista todos os produtos
+     * Lista todos os promoçoes
      */
     public function index()
     {
-        $produtos = Promocao::all();
-        return view('promocoes.index', compact('promocoes'));
+        $promocoes = Promocao::all();
+        return view('dashboard', compact('promocoes'));
     }
 
     /**
@@ -26,24 +26,31 @@ class PromocaoController extends Controller
     }
 
     /**
-     * Salva um produto no banco
+     * Salva uma promoção no banco
      */
     public function store(Request $request)
     {
         $request->validate([
-            'promocao'      => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'imagem'      => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $data = $request->all();
 
         // Upload da imagem
-        if ($request->hasFile('promocao')) {
-            $data['promocao'] = $request->file('promocao')->store('promocoes', 'public');
+        if ($request->hasFile('imagem')) {
+            $file = $request->file('imagem');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // move para public/promocoes
+            $file->move(public_path('promocoes'), $filename);
+
+            // salva caminho relativo para uso com asset()
+            $data['imagem'] = 'promocoes/' . $filename;
         }
 
         Promocao::create($data);
 
-        return redirect()->route('promocoes.index')->with('success', 'Promoçao criada com sucesso.');
+        return redirect()->route('dashboard')->with('success', 'Promoção criada com sucesso.');
     }
 
     /**
@@ -51,54 +58,60 @@ class PromocaoController extends Controller
      */
     public function edit($id)
     {
-        $produto = Promocao::findOrFail($id);
+        $promocao = Promocao::findOrFail($id);
         return view('promocoes.edit', compact('promocao'));
     }
 
     /**
-     * Atualiza um produto
+     * Atualiza uma promoção
      */
     public function update(Request $request, $id)
     {
         $request->validate([
-            'promocao'      => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'imagem' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $produto = Promocao::findOrFail($id);
+        $promocao = Promocao::findOrFail($id);
 
         $data = $request->all();
 
-        // upload da imagem (e deletar a antiga)
-        if ($request->hasFile('promocao')) {
+        if ($request->hasFile('imagem')) {
 
             // Remove a imagem antiga
-            if ($produto->imagem && Storage::disk('public')->exists($produto->imagem)) {
-                Storage::disk('public')->delete($produto->imagem);
+            if ($promocao->imagem && file_exists(public_path($promocao->imagem))) {
+                @unlink(public_path($promocao->imagem));
             }
 
             // Nova imagem
-            $data['promocao'] = $request->file('promocao')->store('promocoes', 'public');
+            $file = $request->file('imagem'); // ✔ CORRETO AGORA
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('promocoes'), $filename);
+
+            $data['imagem'] = 'promocoes/' . $filename;
         }
 
-        $produto->update($data);
+        $promocao->update($data);
 
-        return redirect()->route('produtos.index')->with('success', 'Promoçao atualizada com sucesso.');
+        return redirect()->route('dashboard')->with('success', 'Promoção atualizada com sucesso.');
     }
 
+
     /**
-     * Deletar um produto
+     * Deletar uma promoção
      */
     public function destroy($id)
     {
         $promocao = Promocao::findOrFail($id);
 
-        // deletar imagem
-        if ($promocao->promocao && Storage::disk('public')->exists($promocao->promocao)) {
-            Storage::disk('public')->delete($promocao->promocao);
+        // deletar imagem (verifica public primeiro, depois storage como fallback)
+        if ($promocao->imagem && file_exists(public_path($promocao->imagem))) {
+            @unlink(public_path($promocao->imagem));
+        } elseif ($promocao->imagem && Storage::disk('public')->exists($promocao->imagem)) {
+            Storage::disk('public')->delete($promocao->imagem);
         }
 
         $promocao->delete();
 
-        return redirect()->route('produtos.index')->with('success', 'Produto removido com sucesso.');
+        return redirect()->route('dashboard')->with('success', 'Promoção removida com sucesso.');
     }
 }

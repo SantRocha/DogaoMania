@@ -5,54 +5,55 @@
 >
 
     <x-sidebar.link
-        title="Dashboard"
+        title="Cardápio"
         href="{{ route('dashboard') }}"
         :isActive="request()->routeIs('dashboard')"
     >
         <x-slot name="icon">
-            <x-icons.dashboard class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+            <img src="https://cdn-icons-png.flaticon.com/512/1046/1046747.png" alt="Lanches" class="w-6 h-6">
         </x-slot>
     </x-sidebar.link>
 
-    <x-sidebar.dropdown
-        title="Buttons"
-        :active="Str::startsWith(request()->route()->uri(), 'buttons')"
+    <x-sidebar.link
+        title="Lanches"
+        href="{{ route('dashboard') }}"
+        :isActive="request()->routeIs('dashboard')"
     >
         <x-slot name="icon">
-            <x-heroicon-o-view-grid class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+            <img src="https://cdn-icons-png.flaticon.com/512/5787/5787016.png" alt="Lanches" class="w-6 h-6">
         </x-slot>
+    </x-sidebar.link>
 
-        <x-sidebar.sublink
-            title="Text button"
-            href="{{ route('buttons.text') }}"
-            :active="request()->routeIs('buttons.text')"
-        />
-        <x-sidebar.sublink
-            title="Icon button"
-            href="{{ route('buttons.icon') }}"
-            :active="request()->routeIs('buttons.icon')"
-        />
-        <x-sidebar.sublink
-            title="Text with icon"
-            href="{{ route('buttons.text-icon') }}"
-            :active="request()->routeIs('buttons.text-icon')"
-        />
-    </x-sidebar.dropdown>
-
-    <div
-        x-transition
-        x-show="isSidebarOpen || isSidebarHovered"
-        class="text-sm text-gray-500"
+    <x-sidebar.link
+        title="Marmitas"
+        href="{{ route('dashboard') }}"
+        :isActive="request()->routeIs('dashboard')"
     >
-        Dummy Links
-    </div>
+        <x-slot name="icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/2082/2082045.png" alt="Lanches" class="w-6 h-6">
+        </x-slot>
+    </x-sidebar.link>
 
-    @php
-        $links = array_fill(0, 5, '');
-    @endphp
+    <x-sidebar.link
+        title="Sobremesas"
+        href="{{ route('dashboard') }}"
+        :isActive="request()->routeIs('dashboard')"
+    >
+        <x-slot name="icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/901/901725.png" alt="Lanches" class="w-6 h-6">
+        </x-slot>
+    </x-sidebar.link>
 
-    @foreach ($links as $index => $link)
-        <x-sidebar.link title="Dummy link {{ $index + 1 }}" href="#" />
-    @endforeach
+    <x-sidebar.link
+        title="Bebidas"
+        href="{{ route('dashboard') }}"
+        :isActive="request()->routeIs('dashboard')"
+    >
+        <x-slot name="icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/4777/4777276.png" alt="Bebidas" class="w-6 h-6">
+        </x-slot>
+    </x-sidebar.link>
+
+
 
 </x-perfect-scrollbar>

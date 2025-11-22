@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\PromocaoController;
+use App\Models\Promocao;
+use App\Models\Produto;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,21 +18,37 @@ use App\Http\Controllers\PromocaoController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect(route('dashboard'));
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/cardapio', function () {
+    $promocoes = Promocao::all();
+    $produtos = Produto::all();
+    return view('dashboard', compact('promocoes', 'produtos'));
+})->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('produtos', ProdutoController::class);
+    // Rotas para produtos
+    Route::get('/produtos', [ProdutoController::class, 'index'])->name('produtos.index');
+    Route::get('/produtos/create', [ProdutoController::class, 'create'])->name('produtos.create');
+    Route::post('/produtos/criar', [ProdutoController::class, 'store'])->name('produtos.store');
+    Route::get('/produtos/edit/{id}', [ProdutoController::class, 'edit'])->name('produtos.edit');
+    Route::patch('/produtos/editar/{id}', [ProdutoController::class, 'update'])->name('produtos.editar');
+    Route::delete('/produtos/{id}', [ProdutoController::class, 'destroy'])->name('produtos.destroy');
 
-    Route::resource('produtos', PromocaoController::class);
+
+    // Rotas para promoções
+    Route::get('/promocoes', [PromocaoController::class, 'index'])->name('promocoes.index');
+    Route::get('/promocoes/create', [PromocaoController::class, 'create'])->name('promocoes.create');
+    Route::post('/promocoes/criar', [PromocaoController::class, 'store'])->name('promocoes.store');
+    Route::get('/promocoes/edit', [PromocaoController::class, 'edit'])->name('promocoes.edit');
+    Route::patch('/promocoes/editar', [PromocaoController::class, 'update'])->name('promocoes.editar');
+    Route::delete('/promocoes', [PromocaoController::class, 'destroy'])->name('promocoes.destroy');
+
 });
 
 
