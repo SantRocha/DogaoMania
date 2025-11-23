@@ -20,11 +20,11 @@
         <section class="mb-12">
             @if(isset($promocoes) && $promocoes->count())
                 <h2 class="text-3xl font-bold mb-6 text-center text-red-600">Promoções Especiais</h2>
-                <div class="carousel relative rounded-xl overflow-hidden shadow-lg">
+                <div class="carousel rounded-xl overflow-hidden relative">
                     <div class="carousel-inner flex transition-transform duration-500">
                         @foreach($promocoes as $promo)
                             <div class="carousel-item w-full flex-shrink-0">
-                                <img src="{{ asset($promo->imagem) }}" alt="Promoção {{ $loop->iteration }}" class="w-full h-[500px] object-cover">
+                                <img src="{{ asset($promo->imagem) }}" alt="Promoção {{ $loop->iteration }}" class="w-full h-full md:h-[500px] object-cover">
                             </div>
                         @endforeach
                     </div>
@@ -55,50 +55,50 @@
                 <h2 class="text-3xl font-bold mb-6 text-center text-red-600">Nosso Cardápio</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Product 1 -->
-@foreach($produtos as $produto)
-    <div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-        <img src="{{ asset($produto->imagem) }}" alt="{{ $produto->nome }}" class="w-full h-48 object-cover">
+                    @foreach($produtos as $produto)
+                        <div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                            <img src="{{ asset($produto->imagem) }}" alt="{{ $produto->nome }}" class="w-full h-72 object-cover">
 
-        <div class="p-6">
-            <h3 class="text-xl font-bold mb-2">{{ $produto->nome }}</h3>
-            <p class="text-gray-600 mb-4 dark:text-gray-50">{{ $produto->descricao ?? '' }}</p>
-            <p class="text-gray-600 mb-4 dark:text-gray-50">{{ $produto->ingredientes ?? '' }}</p>
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold mb-2">{{ $produto->nome }}</h3>
+                                <p class="text-gray-600 mb-4 dark:text-gray-50">{{ $produto->descricao ?? '' }}</p>
+                                <p class="text-gray-600 mb-4 dark:text-gray-50">{{ $produto->ingredientes ?? '' }}</p>
 
-            <div class="flex justify-between items-center mb-4">
-                <span class="text-xl font-bold text-red-600">R$ {{ $produto->preco }}</span>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-3xl font-bold text-red-600">R$ {{ number_format($produto->preco, 2, ',', '.') }}</span>
 
-                <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                    Adicionar
-                </button>
-            </div>
+                                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                                        Adicionar
+                                    </button>
+                                </div>
 
 
-            @if (Auth::user())
-                {{-- Botões de editar e excluir --}}
-                <div class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
+                                @if (Auth::user())
+                                    {{-- Botões de editar e excluir --}}
+                                    <div class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
 
-                    <a href="{{ route('produtos.edit', $produto->id) }}"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                        Editar
-                    </a>
+                                        <a href="{{ route('produtos.edit', $produto->id) }}"
+                                        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                            Editar
+                                        </a>
 
-                    <form action="{{ route('produtos.destroy', $produto->id) }}"
-                        method="POST"
-                        onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
-                        @csrf
-                        @method('DELETE')
+                                        <form action="{{ route('produtos.destroy', $produto->id) }}"
+                                            method="POST"
+                                            onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
+                                            @csrf
+                                            @method('DELETE')
 
-                        <button type="submit"
-                                class="bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-800 transition-colors">
-                            Excluir
-                        </button>
-                    </form>
+                                            <button type="submit"
+                                                    class="bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-800 transition-colors">
+                                                Excluir
+                                            </button>
+                                        </form>
 
-                </div>
-            @endif
-        </div>
-    </div>
-@endforeach
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
 
                 </div>
             @endif
@@ -183,11 +183,11 @@
         }
 
         // auto-rotate com pausa ao passar o mouse
-        let intervalId = setInterval(next, 5000);
+        let intervalId = setInterval(next, 3000);
         carousel.addEventListener('mouseenter', () => clearInterval(intervalId));
         carousel.addEventListener('mouseleave', () => {
         clearInterval(intervalId);
-        intervalId = setInterval(next, 5000);
+        intervalId = setInterval(next, 3000);
         });
 
         // recalc widths on resize

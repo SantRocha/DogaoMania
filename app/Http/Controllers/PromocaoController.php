@@ -14,7 +14,7 @@ class PromocaoController extends Controller
     public function index()
     {
         $promocoes = Promocao::all();
-        return view('dashboard', compact('promocoes'));
+        return view('promocoes.index', compact('promocoes'));
     }
 
     /**

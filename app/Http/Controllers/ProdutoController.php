@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produto;
+use App\Models\Promocao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,9 +12,27 @@ class ProdutoController extends Controller
     /**
      * Lista todos os produtos
      */
-    public function index()
+    public function lanches()
     {
-        $produtos = Produto::all();
+        $produtos = Produto::where('categoria', 'Lanches')->get();
+        return view('dashboard', compact('produtos'));
+    }
+
+    public function marmitas()
+    {
+        $produtos = Produto::where('categoria', 'Marmitas')->get();
+        return view('dashboard', compact('produtos'));
+    }
+
+    public function sobremesas()
+    {
+        $produtos = Produto::where('categoria', 'Sobremesas')->get();
+        return view('dashboard', compact('produtos'));
+    }
+
+    public function bebidas()
+    {
+        $produtos = Produto::where('categoria', 'Bebidas')->get();
         return view('dashboard', compact('produtos'));
     }
 

@@ -21,6 +21,10 @@ Route::get('/', function () {
     return redirect(route('dashboard'));
 });
 
+Route::get('/dashboard', function () {
+    return redirect(route('dashboard'));
+});
+
 Route::get('/cardapio', function () {
     $promocoes = Promocao::all();
     $produtos = Produto::all();
@@ -33,7 +37,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Rotas para produtos
-    Route::get('/produtos', [ProdutoController::class, 'index'])->name('produtos.index');
     Route::get('/produtos/create', [ProdutoController::class, 'create'])->name('produtos.create');
     Route::post('/produtos/criar', [ProdutoController::class, 'store'])->name('produtos.store');
     Route::get('/produtos/edit/{id}', [ProdutoController::class, 'edit'])->name('produtos.edit');
@@ -42,28 +45,17 @@ Route::middleware('auth')->group(function () {
 
 
     // Rotas para promoções
-    Route::get('/promocoes', [PromocaoController::class, 'index'])->name('promocoes.index');
+    Route::get('/promocoes/view', [PromocaoController::class, 'index'])->name('promocoes.index');
     Route::get('/promocoes/create', [PromocaoController::class, 'create'])->name('promocoes.create');
     Route::post('/promocoes/criar', [PromocaoController::class, 'store'])->name('promocoes.store');
-    Route::get('/promocoes/edit', [PromocaoController::class, 'edit'])->name('promocoes.edit');
-    Route::patch('/promocoes/editar', [PromocaoController::class, 'update'])->name('promocoes.editar');
-    Route::delete('/promocoes', [PromocaoController::class, 'destroy'])->name('promocoes.destroy');
-
+    Route::get('/promocoes/edit/{id}', [PromocaoController::class, 'edit'])->name('promocoes.edit');
+    Route::patch('/promocoes/editar/{id}', [PromocaoController::class, 'update'])->name('promocoes.editar');
+    Route::delete('/promocoes/{id}', [PromocaoController::class, 'destroy'])->name('promocoes.destroy');
 });
 
-
-// useless routes
-// Just to demo sidebar dropdown links active states.
-Route::get('/buttons/text', function () {
-    return view('buttons-showcase.text');
-})->middleware(['auth'])->name('buttons.text');
-
-Route::get('/buttons/icon', function () {
-    return view('buttons-showcase.icon');
-})->middleware(['auth'])->name('buttons.icon');
-
-Route::get('/buttons/text-icon', function () {
-    return view('buttons-showcase.text-icon');
-})->middleware(['auth'])->name('buttons.text-icon');
+Route::get('/lanches', [ProdutoController::class, 'lanches'])->name('produtos.lanches');
+Route::get('/marmitas', [ProdutoController::class, 'marmitas'])->name('produtos.marmitas');
+Route::get('/sobremesas', [ProdutoController::class, 'sobremesas'])->name('produtos.sobremesas');
+Route::get('/bebidas', [ProdutoController::class, 'bebidas'])->name('produtos.bebidas');
 
 require __DIR__ . '/auth.php';
