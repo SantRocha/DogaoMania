@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\PromocaoController;
+use App\Http\Controllers\CarrinhoController;
 use App\Models\Promocao;
 use App\Models\Produto;
 /*
@@ -27,7 +28,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/cardapio', function () {
     $promocoes = Promocao::all();
-    $produtos = Produto::all();
+    $produtos = Produto::orderBy('nome', 'asc')->get();
     return view('dashboard', compact('promocoes', 'produtos'));
 })->name('dashboard');
 
@@ -57,5 +58,11 @@ Route::get('/lanches', [ProdutoController::class, 'lanches'])->name('produtos.la
 Route::get('/marmitas', [ProdutoController::class, 'marmitas'])->name('produtos.marmitas');
 Route::get('/sobremesas', [ProdutoController::class, 'sobremesas'])->name('produtos.sobremesas');
 Route::get('/bebidas', [ProdutoController::class, 'bebidas'])->name('produtos.bebidas');
+
+// Carrinho
+Route::get('/carrinho', [CarrinhoController::class, 'index'])->name('carrinho.index');
+Route::post('/carrinho/adicionar', [CarrinhoController::class, 'add'])->name('carrinho.add');
+Route::post('/carrinho/remover', [CarrinhoController::class, 'remove'])->name('carrinho.remove');
+Route::post('/carrinho/atualizar', [CarrinhoController::class, 'update'])->name('carrinho.update');
 
 require __DIR__ . '/auth.php';

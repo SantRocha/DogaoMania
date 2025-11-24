@@ -14,25 +14,25 @@ class ProdutoController extends Controller
      */
     public function lanches()
     {
-        $produtos = Produto::where('categoria', 'Lanches')->get();
+        $produtos = Produto::where('categoria', 'Lanches')->orderBy('nome', 'asc')->get();
         return view('dashboard', compact('produtos'));
     }
 
     public function marmitas()
     {
-        $produtos = Produto::where('categoria', 'Marmitas')->get();
+        $produtos = Produto::where('categoria', 'Marmitas')->orderBy('nome', 'asc')->get();
         return view('dashboard', compact('produtos'));
     }
 
     public function sobremesas()
     {
-        $produtos = Produto::where('categoria', 'Sobremesas')->get();
+        $produtos = Produto::where('categoria', 'Sobremesas')->orderBy('nome', 'asc')->get();
         return view('dashboard', compact('produtos'));
     }
 
     public function bebidas()
     {
-        $produtos = Produto::where('categoria', 'Bebidas')->get();
+        $produtos = Produto::where('categoria', 'Bebidas')->orderBy('nome', 'asc')->get();
         return view('dashboard', compact('produtos'));
     }
 

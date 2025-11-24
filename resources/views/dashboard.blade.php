@@ -67,9 +67,36 @@
                                 <div class="flex justify-between items-center mb-4">
                                     <span class="text-3xl font-bold text-red-600">R$ {{ number_format($produto->preco, 2, ',', '.') }}</span>
 
-                                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                                        Adicionar
-                                    </button>
+                                    <form action="{{ route('carrinho.add') }}" method="POST" class="items-center gap-3">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $produto->id }}">
+
+                                        <!-- Contador de quantidade -->
+                                        <div class="flex items-center gap-2 mb-3">
+                                            <button type="button"
+                                                    onclick="changeQty({{ $produto->id }}, -1)"
+                                                    class="w-8 h-8 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-full text-lg">
+                                                -
+                                            </button>
+
+                                            <input id="qty-{{ $produto->id }}"
+                                                name="quantidade"
+                                                type="text"
+                                                value="1"
+                                                min="1"
+                                                class="w-12 text-center border rounded dark:bg-dark-eval-1">
+
+                                            <button type="button"
+                                                    onclick="changeQty({{ $produto->id }}, 1)"
+                                                    class="w-8 h-8 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-full text-lg">
+                                                +
+                                            </button>
+                                        </div>
+
+                                        <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors w-full">
+                                            Adicionar
+                                        </button>
+                                    </form>
                                 </div>
 
 
@@ -99,7 +126,6 @@
                             </div>
                         </div>
                     @endforeach
-
                 </div>
             @endif
         </section>
@@ -201,5 +227,15 @@
         // inicializa
         recalcWidths();
     });
+    function changeQty(id, amount) {
+        const input = document.getElementById('qty-' + id);
+        let value = parseInt(input.value);
+
+        value += amount;
+
+        if (value < 1) value = 1;
+
+        input.value = value;
+    }
     </script>
 </x-app-layout>
