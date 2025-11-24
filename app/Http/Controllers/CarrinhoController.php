@@ -33,6 +33,15 @@ class CarrinhoController extends Controller
 
         session()->put('carrinho', $carrinho);
 
+        $qtdTotal = collect($carrinho)->sum('quantidade');
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'qtd' => $qtdTotal
+            ]);
+        }
+
         return back()->with('success', 'Produto adicionado ao carrinho!');
     }
 

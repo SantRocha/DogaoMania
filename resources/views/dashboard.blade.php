@@ -67,7 +67,7 @@
                                 <div class="flex justify-between items-center mb-4">
                                     <span class="text-3xl font-bold text-red-600">R$ {{ number_format($produto->preco, 2, ',', '.') }}</span>
 
-                                    <form action="{{ route('carrinho.add') }}" method="POST" class="items-center gap-3">
+                                    <form id="form-add-{{ $produto->id }}" action="{{ route('carrinho.add') }}" method="POST" class="items-center gap-3">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $produto->id }}">
 
@@ -93,12 +93,13 @@
                                             </button>
                                         </div>
 
-                                        <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors w-full">
+                                        <button type="button"
+                                                onclick="addToCart({{ $produto->id }})"
+                                                class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors w-full">
                                             Adicionar
                                         </button>
                                     </form>
                                 </div>
-
 
                                 @if (Auth::user())
                                     {{-- Botões de editar e excluir --}}
@@ -129,6 +130,10 @@
                 </div>
             @endif
         </section>
+
+        <div id="toast-success" class="fixed top-5 right-5 z-50 bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg opacity-0 pointer-events-none transition-all duration-300">
+            Produto adicionado ao carrinho!
+        </div>
     </main>
 
     <script>
@@ -227,6 +232,8 @@
         // inicializa
         recalcWidths();
     });
+
+
     function changeQty(id, amount) {
         const input = document.getElementById('qty-' + id);
         let value = parseInt(input.value);
@@ -236,6 +243,46 @@
         if (value < 1) value = 1;
 
         input.value = value;
+    }
+
+
+    function addToCart(id) {
+        const form = document.getElementById("form-add-" + id);
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": formData.get("_token"),
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                // Atualiza o número do carrinho
+                const badge = document.getElementById('carrinho-count');
+
+                badge.textContent = data.qtd;
+
+                if (badge.classList.contains('hidden')) {
+                    badge.classList.remove('hidden');
+                }
+
+                showToast();
+            }
+        })
+    }
+
+    function showToast() {
+        const toast = document.getElementById("toast-success");
+        toast.style.opacity = "1";
+        toast.style.transform = "translateY(0)";
+
+        setTimeout(() => {
+            toast.style.opacity = "0";
+        }, 2000);
     }
     </script>
 </x-app-layout>
