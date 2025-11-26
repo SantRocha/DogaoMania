@@ -64,5 +64,15 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/3662/3662441.png" alt="Bebidas" class="w-6 h-6">
             </x-slot>
         </x-sidebar.link>
+
+        <x-sidebar.link
+            title="Novo Usuário"
+            href="{{ route('register') }}"
+            :isActive="request()->routeIs('register')"
+        >
+            <x-slot name="icon">
+                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077012.png" alt="Bebidas" class="w-6 h-6">
+            </x-slot>
+        </x-sidebar.link>
     @endif
 </x-perfect-scrollbar>
