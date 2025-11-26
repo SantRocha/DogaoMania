@@ -42,13 +42,11 @@
             </a>
 
             @if($qtdCarrinho > 0)
-                <span id="carrinho-count"
-                    class="absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full translate-x-2 -translate-y-2">
+                <span class="carrinho-count absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full translate-x-2 -translate-y-2">
                     {{ $qtdCarrinho }}
                 </span>
             @else
-                <span id="carrinho-count"
-                    class="hidden absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full translate-x-2 -translate-y-2">
+                <span class="carrinho-count hidden absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full translate-x-2 -translate-y-2">
                     0
                 </span>
             @endif
@@ -143,13 +141,11 @@
         </a>
 
         @if($qtdCarrinho > 0)
-            <span id="carrinho-count"
-                class="absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full translate-x-2 -translate-y-2">
+            <span class="carrinho-count absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full translate-x-2 -translate-y-2">
                 {{ $qtdCarrinho }}
             </span>
         @else
-            <span id="carrinho-count"
-                class="hidden absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full translate-x-2 -translate-y-2">
+            <span class="carrinho-count hidden absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full translate-x-2 -translate-y-2">
                 0
             </span>
         @endif

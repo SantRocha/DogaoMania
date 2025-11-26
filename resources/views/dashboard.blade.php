@@ -262,15 +262,17 @@
         .then(data => {
             if (data.success) {
                 // Atualiza o número do carrinho
-                const badge = document.getElementById('carrinho-count');
+                const badges = document.querySelectorAll('.carrinho-count');
 
-                badge.textContent = data.qtd;
+                badges.forEach(badge => {
+                    badge.textContent = data.qtd;
 
-                if (badge.classList.contains('hidden')) {
-                    badge.classList.remove('hidden');
-                }
-
-                showToast();
+                    if (data.qtd > 0) {
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                });
             }
         })
     }
